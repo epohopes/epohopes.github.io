@@ -42,12 +42,6 @@
             align-items: center;
             text-align: center;
             padding: 20px;
-            pointer-events: none;
-            /* 让点击穿透，但内部可交互元素需恢复 */;
-        }
-        .wrap>* {
-            pointer-events: auto;
-            /* 子元素可点击 */;
         }
 
         /* ===== 恒星编号 ===== */
@@ -241,24 +235,12 @@
     let W, H;
 
     function resize() {
-        W = canvas.width = window.innerWidth;
-        H = canvas.height = window.innerHeight;
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    core.x = W / 2;
+    core.y = H / 2;
     }
-    window.addEventListener('resize', () => {
-        resize();
-        // 重置行星位置比例（避免跑出边界）
-        planets.forEach((p, i) => {
-            // 只调整比例，不重置位置
-        });
-        // 更新中心恒星位置
-        core.x = W / 2;
-        core.y = H / 2;
-        // 重新分布星星（可选）
-        stars.forEach(s => {
-            s.x = Math.random() * W;
-            s.y = Math.random() * H;
-        });
-    });
+    window.addEventListener('resize', resize);
     resize();
 
     // --- 小星星（1500颗） ---
