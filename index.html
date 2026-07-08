@@ -126,7 +126,8 @@
             scroll-snap-align: center;
             padding: 6px 0;
             transition: all 0.3s ease;
-            opacity: 0.6;
+            opacity: 1;
+            color: #ffffff;
             font-size: 22px;
         }
         .text-line.active {
@@ -229,6 +230,12 @@
             <div class="text-line">祝方炯同学20岁生日快乐！</div>
             <div class="text-line">茫茫星海亿万光年</div>
             <div class="text-line">能与你相遇是极小概率的奇迹</div>
+            <div class="text-line">全球总人口 ≈ 80 亿 = 8000000000 人</div>
+            <div class="text-line">人的一生平均会遇见 80000 人</div>
+            <div class="text-line">单次随机相遇概率 = 一生遇见人数 ÷ 全球总人口</div>
+            <div class="text-line">= 80000 ÷ 8000000000</div>
+            <div class="text-line">= 0.00001</div>
+            <div class="text-line">= 1/100000（十万分之一）</div>
             <div class="text-line">祝你岁岁平安，生日快乐!</div>
         </div>
         <div class="timer" id="liveTime">计算中...</div>
@@ -246,7 +253,7 @@
     <script>
         // ===================== 自定义配置区（全部图片改为绝对线上地址） =====================
         const birthday = new Date('2006-07-08');
-        const starCode = 'Fjong-2006-708';
+        const starCode = 'Fjiong-2006-708';
 
         // 16颗行星参数 - 完整CDN路径
         const planetConfig = [
@@ -292,7 +299,7 @@
             }
             const day = Math.floor(ms / (1000 * 60 * 60 * 24));
             const hour = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById('liveTime').innerText = `自诞生至今，宇宙已运行 ${day} 天 ${hour} 小时`;
+            document.getElementById('liveTime').innerText = `自诞生至今，属于你的宇宙已运行 ${day} 天 ${hour} 小时`;
         }
         updateTime();
         setInterval(updateTime, 1000);
