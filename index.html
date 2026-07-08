@@ -98,15 +98,9 @@
             opacity: 0.75;
         }
         @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-14px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-14px); }
+            100% { transform: translateY(0px); }
         }
         .planet-item img,
         .astro-item img {
@@ -118,24 +112,29 @@
             opacity: 0.8;
         }
 
-        /* ===== 文字内容层 ===== */
+        /* ===== 文字内容层 —— 新布局 ===== */
         .wrap {
-            position: relative;
+            position: relative;      /* 让底部提示 absolute 相对此定位 */
             z-index: 4;
             width: 100%;
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
             align-items: center;
-            text-align: center;
-            padding: 20px;
+            padding: 20px 20px 80px;  /* 底部留空，避免被底部提示覆盖 */
+            box-sizing: border-box;
         }
+
+        /* 主文本块：垂直居中 */
         .text-middle-block {
+            flex: 1;                 /* 占据剩余所有空间 */
             display: flex;
             flex-direction: column;
+            justify-content: center; /* 垂直居中 */
             align-items: center;
+            width: 100%;
         }
+
         .star-id {
             font-size: 16px;
             letter-spacing: 4px;
@@ -143,6 +142,7 @@
             color: #ffffff;
             user-select: none;
         }
+
         .main-text {
             max-width: 600px;
             max-height: 40vh;
@@ -179,14 +179,18 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
+        /* 计时器：放在主文本下方，与底部提示保持距离 */
         .timer {
-            margin-top: 180px;
+            margin: 10px 0 50px 0;   /* 上边距小，下边距大，避免与底部提示重叠 */
             font-size: 14px;
             user-select: none;
             white-space: pre-line;
             line-height: 1.8;
             color: #fff;
+            text-align: center;
         }
+
+        /* 底部提示：固定在页面最底部 */
         .hint {
             position: absolute;
             bottom: 30px;
@@ -222,6 +226,7 @@
             text-align: center;
         }
 
+        /* ===== 移动端适配 ===== */
         @media (max-width: 480px) {
             .main-text {
                 max-height: 50vh;
@@ -245,7 +250,14 @@
                 width: 70px;
             }
             .timer {
-                margin-top: 120px;
+                margin: 10px 0 40px 0;
+            }
+            .wrap {
+                padding: 15px 15px 70px;
+            }
+            .hint {
+                bottom: 20px;
+                font-size: 12px;
             }
         }
     </style>
@@ -263,7 +275,7 @@
 <!-- 主页面 -->
 <div class="page-main" id="pageMain">
 
-    <!-- ✅ 音频独立，正确闭合 -->
+    <!-- 音频 -->
     <audio id="birthdayAudio" loop preload="auto" style="display:none;">
         <source src="https://epohopes.github.io/birthday_song.mp3" type="audio/mpeg" />
         您的浏览器不支持音频播放，请升级浏览器。
@@ -274,6 +286,7 @@
     <div id="astroBox"></div>
 
     <div class="wrap">
+        <!-- 中间文本块（星标 + 滚动主文本）垂直居中 -->
         <div class="text-middle-block">
             <div class="star-id" id="starId">恒星编号：S-Fjiong-2006-708</div>
             <div class="main-text" id="mainText">
@@ -289,7 +302,11 @@
                 <div class="text-line">祝你岁岁平安，生日快乐！</div>
             </div>
         </div>
+
+        <!-- 计时器 —— 位于主文本下方，不与底部提示重叠 -->
         <div class="timer" id="liveTime">计算中...</div>
+
+        <!-- 底部提示固定在最底部 -->
         <div class="hint">双击星空打开私人备忘录 · 点击页面播放生日歌</div>
     </div>
 
@@ -310,7 +327,7 @@
 
 <script>
     // ==================== 密码解锁 ====================
-    const correctPassword = "fangjiong20";
+    const correctPassword = "0708";
     const pwdBox = document.getElementById("pwdBox");
     const pageMain = document.getElementById("pageMain");
     const pwdInput = document.getElementById("pwdInput");
@@ -342,7 +359,6 @@
         const birthday = new Date('2006-07-08');
         const starCode = 'Fjiong-2006-708';
 
-        // 行星配置
         const planetConfig = [
             { img: 'https://epohopes.github.io/planet1.png', xRatio: 0.2, yRatio: 0.3, speed: 0.005 },
             { img: 'https://epohopes.github.io/planet2.png', xRatio: 0.8, yRatio: 0.6, speed: -0.004 },
@@ -362,7 +378,6 @@
             { img: 'https://epohopes.github.io/planet16.png', xRatio: 0.78, yRatio: 0.48, speed: 0.004 }
         ];
 
-        // 宇航员配置
         const astroConfig = [
             { img: "https://epohopes.github.io/astronaut1.png", xRatio: 0.12, yRatio: 0.2, delay: "0s" },
             { img: "https://epohopes.github.io/astronaut2.png", xRatio: 0.88, yRatio: 0.28, delay: "0.6s" },
@@ -419,7 +434,6 @@
         const astroList = [];
         let stars = [];
 
-        // 行星 DOM
         const planetBox = document.getElementById('planetBox');
         planetConfig.forEach(cfg => {
             const wrap = document.createElement('div');
@@ -434,7 +448,6 @@
             planetList.push({ cfg, x: 0, y: 0, dom: wrap });
         });
 
-        // 宇航员 DOM
         const astroBox = document.getElementById('astroBox');
         astroConfig.forEach(cfg => {
             const wrap = document.createElement('div');
@@ -471,7 +484,7 @@
         window.addEventListener('resize', resize);
         resize();
 
-        // 生成星星
+        // 星星
         for (let i = 0; i < 1500; i++) {
             stars.push({
                 x: Math.random() * W,
@@ -481,7 +494,6 @@
             });
         }
 
-        // 渲染循环
         function draw() {
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, W, H);
@@ -515,7 +527,7 @@
             this.style.display = 'none';
         });
 
-        // 音频控制
+        // 音频
         const audio = document.getElementById('birthdayAudio');
         let audioPlayed = false;
 
