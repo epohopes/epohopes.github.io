@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专属恒星档案</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+          width:100vw;height:100vh;
+          background:#000;
+          overflow:hidden;
+          font-family:"Consolas",monospace;
+          color:#b0c4de;
+        }
+        #canvas{position:fixed;top:0;left:0;z-index:1;}
+        .wrap{
+          position:relative;
+          z-index:2;
+          width:100%;height:100%;
+          display:flex;
+          flex-direction:column;
+          justify-content:center;
+          align-items:center;
+          text-align:center;
+          padding:20px;
+        }
+        .star-id{
+          font-size:14px;
+          letter-spacing:3px;
+          opacity:0.6;
+          margin-bottom:24px;
+        }
+        .main-text{
+          max-width:520px;
+          line-height:2;
+          font-size:16px;
+          opacity:0.85;
+        }
+        .timer{
+          margin-top:40px;
+          font-size:13px;
+          opacity:0.5;
+        }
+        .hint{
+          position:absolute;
+          bottom:30px;
+          font-size:12px;
+          opacity:0.3;
+        }
+        .hidden-note{
+          position:fixed;
+          top:50%;left:50%;
+          transform:translate(-50%,-50%);
+          background:rgba(10,15,25,0.95);
+          padding:32px;
+          border:1px solid #445577;
+          max-width:450px;
+          z-index:10;
+          display:none;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="wrap">
+    <div class="star-id">恒星编号：S-{你的朋友生日哈希}</div>
+    <div class="main-text">
+        在亿万无序运行的宇宙代码里，<br>
+        这颗恒星的坐标为你永久固定。<br>
+        它诞生于你来到这个世界的那一刻。<br><br>
+        愿逻辑永远自洽，程序无异常，需求少变更，人生总有最优解。<br>
+        Happy Birthday.
+    </div>
+    <div class="timer" id="liveTime"></div>
+    <div class="hint">双击星空打开私人备忘录</div>
+</div>
+<div class="hidden-note" id="note">
+    写给老友：<br>
+    这么多年一路写代码，一路往前走。不用追赶所有人的节奏，保持自己的坐标系就够了。万事顺遂，永远保有热爱。
+    <br><br>点击空白处关闭
+</div>
+
+<script>
+    // ========== 这里改两个参数就行 ==========
+    const birthday = new Date('2000-05-20') // 改成他的生日
+    const starCode = "8742-9165-307" // 随便编一串专属编号
+    document.querySelector('.star-id').innerText = `恒星编号：S-${starCode}`;
+
+    // 生命计时器
+    function updateTime(){
+      let now = Date.now();
+      let born = birthday.getTime();
+      let ms = now - born;
+      let day = Math.floor(ms/(1000*60*60*24));
+      let hour = Math.floor((ms%(1000*60*60*24))/(1000*60*60));
+      document.getElementById('liveTime').innerText = `自诞生至今，宇宙已运行 ${day} 天 ${hour} 小时`;
+    }
+    setInterval(updateTime,1000);
+    updateTime();
+
+    // 星空画布
+    const c = document.getElementById('canvas');
+    const ctx = c.getContext('2d');
+    function resize(){c.width=innerWidth;c.height=innerHeight;}
+    resize();
+    window.onresize = resize;
+
+    let stars = [];
+    for(let i=0;i<1200;i++){
+      stars.push({
+        x:Math.random()*c.width,
+        y:Math.random()*c.height,
+        r:Math.random()*1.2,
+        speed:Math.random()*0.15
+      })
+    }
+
+    // 中心主恒星
+    let core = {x:c.width/2,y:c.height/2};
+
+    function draw(){
+      ctx.fillStyle='#000';
+      ctx.fillRect(0,0,c.width,c.height);
+      ctx.fillStyle='#fff';
+      stars.forEach(s=>{
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fill();
+        s.x -= s.speed;
+        if(s.x<0)s.x=c.width;
+      })
+      // 中心亮星
+      let grad = ctx.createRadialGradient(core.x,core.y,0,core.x,core.y,120);
+      grad.addColorStop(0,'rgba(180,210,255,0.4)');
+      grad.addColorStop(1,'rgba(180,210,255,0)');
+      ctx.fillStyle=grad;
+      ctx.beginPath();
+      ctx.arc(core.x,core.y,120,0,Math.PI*2);
+      ctx.fill();
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // 双击打开备忘录
+    const note = document.getElementById('note');
+    document.body.ondblclick = ()=>{
+      note.style.display = 'block';
+    }
+    note.onclick = ()=> note.style.display = 'none';
+</script>
+</body>
+</html>
