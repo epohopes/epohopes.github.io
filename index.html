@@ -316,27 +316,25 @@
         textContainer.addEventListener('scroll', updateActiveLine);
         updateActiveLine();
 
-        // 星空画布（仅流动小星星，删除中心亮光）
+        // 星空画布基础
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         let W, H;
-        // 提前初始化core，解决Cannot access 'core' before initialization
         let core = { x: 0, y: 0 };
 
         function resize() {
             W = canvas.width = window.innerWidth;
             H = canvas.height = window.innerHeight;
-            // 重置中心恒星坐标
             core.x = W / 2;
             core.y = H / 2;
-            // 窗口缩放同步更新所有行星位置
+            // 行星位置更新
             planetList.forEach(p => {
                 p.x = W * p.cfg.xRatio;
                 p.y = H * p.cfg.yRatio;
                 p.dom.style.left = p.x + 'px';
                 p.dom.style.top = p.y + 'px';
             })
-            // 同步更新宇航员位置
+            // 宇航员位置更新
             astroList.forEach(a => {
                 a.x = W * a.cfg.xRatio;
                 a.y = H * a.cfg.yRatio;
@@ -344,11 +342,8 @@
                 a.dom.style.top = a.y + 'px';
             })
         }
-        // 先定义core，再绑定resize、执行resize
-        window.addEventListener('resize', resize);
-        resize();
 
-        // 生成1500颗流动小星星
+        // 1. 先生成星星
         let stars = [];
         for (let i = 0; i < 1500; i++) {
             stars.push({
@@ -359,7 +354,7 @@
             });
         }
 
-        // 批量生成16颗行星DOM
+        // 2. 先生成全部行星DOM，初始化planetList
         const planetBox = document.getElementById('planetBox');
         let planetList = [];
         planetConfig.forEach(cfg => {
@@ -380,7 +375,7 @@
             })
         })
 
-        // 批量生成7个宇航员DOM（全部同时显示，不同浮动延迟）
+        // 3. 先生成全部宇航员DOM，初始化astroList
         const astroBox = document.getElementById('astroBox');
         let astroList = [];
         astroConfig.forEach(cfg => {
@@ -400,12 +395,15 @@
             })
         })
 
-        // 主渲染循环：星星流动 + 行星横向轨道移动
+        // 4. 全部数组初始化完成后，再绑定resize、执行resize
+        window.addEventListener('resize', resize);
+        resize();
+
+        // 渲染循环
         function draw() {
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, W, H);
             ctx.fillStyle = '#fff';
-            // 绘制流动星星
             stars.forEach(s => {
                 ctx.beginPath();
                 ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
@@ -413,7 +411,6 @@
                 s.x -= s.speed;
                 if (s.x < 0) s.x = W;
             });
-            // 更新所有行星横向位置
             planetList.forEach(p => {
                 p.x += p.cfg.speed;
                 if (p.x < -p.cfg.size * 2) p.x = W + p.cfg.size * 2;
