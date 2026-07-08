@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>专属恒星档案</title>
+    <title>方炯20岁生日快乐</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
         body{
@@ -26,28 +26,34 @@
           padding:20px;
         }
         .star-id{
-          font-size:14px;
-          letter-spacing:3px;
+          font-size:16px;
+          letter-spacing:4px;
           opacity:0.6;
           margin-bottom:24px;
         }
+        /* 大字体+可滚动文案核心样式 */
         .main-text{
-          max-width:520px;
-          line-height:2;
-          font-size:16px;
-          opacity:0.85;
+          max-width: 600px;
+          max-height: 40vh;
+          overflow-y: auto;
+          line-height: 2.2;
+          font-size: 24px;
+          opacity: 0.9;
+          padding: 10px 20px;
         }
-        .timer{
-          margin-top:40px;
-          font-size:13px;
-          opacity:0.5;
+        /* 美化滚动条 */
+        .main-text::-webkit-scrollbar {
+          width: 5px;
         }
-        .hint{
-          position:absolute;
-          bottom:30px;
-          font-size:12px;
-          opacity:0.3;
+        .main-text::-webkit-scrollbar-thumb {
+          background: rgba(176, 196, 222, 0.4);
+          border-radius: 3px;
         }
+        .main-text::-webkit-scrollbar-track {
+          background: rgba(255,255,255,0.05);
+        }
+        .timer{margin-top:40px;font-size:14px;opacity:0.6;}
+        .hint{position:absolute;bottom:30px;font-size:13px;opacity:0.35;}
         .hidden-note{
           position:fixed;
           top:50%;left:50%;
@@ -55,100 +61,169 @@
           background:rgba(10,15,25,0.95);
           padding:32px;
           border:1px solid #445577;
-          max-width:450px;
+          max-width:500px;
           z-index:10;
           display:none;
+          font-size:18px;
+          line-height:1.8;
+        }
+        /* 宇航员浮动动画 */
+        .astronaut {
+          margin-top: 32px;
+          animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+          0% {transform: translateY(0px);}
+          50% {transform: translateY(-14px);}
+          100% {transform: translateY(0px);}
         }
     </style>
 </head>
 <body>
-<canvas id="canvas"></canvas>
-<div class="wrap">
-    <div class="star-id">恒星编号：S-{你的朋友生日哈希}</div>
-    <div class="main-text">
-        在亿万无序运行的宇宙代码里，<br>
-        这颗恒星的坐标为你永久固定。<br>
-        它诞生于你来到这个世界的那一刻。<br><br>
-        愿逻辑永远自洽，程序无异常，需求少变更，人生总有最优解。<br>
-        Happy Birthday.
+<!-- 生日背景音乐 -->
+<audio id="birthdayAudio" loop preload="auto">
+    <source src="./birthday_song.mp3" type="audio/mpeg">
+
+
+    <canvas id="canvas"></canvas>
+
+    <div class="wrap">
+        <div class="star-id">恒星编号：S-Fjong-2006-708</div>
+        <!-- 可修改生日主文案，自由换行 -->
+        <div class="main-text">
+            写给你的生日祝福<br>
+            茫茫星海亿万光年<br>
+            能与你相遇是极小概率的奇迹<br>
+            祝你岁岁平安，生日快乐<br>
+            往后每一年的星空，都有我陪你看
+        </div>
+        <!-- 浮动宇航员SVG图案 -->
+        <div class="astronaut">
+            <svg width="90" height="90" viewBox="0 0 24 24" fill="rgba(200,220,255,0.75)">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+            </svg>
+        </div>
+        <div class="timer" id="liveTime"></div>
+        <div class="hint">双击星空打开私人备忘录 · 点击页面播放生日歌</div>
     </div>
-    <div class="timer" id="liveTime"></div>
-    <div class="hint">双击星空打开私人备忘录</div>
-</div>
-<div class="hidden-note" id="note">
-    写给老友：<br>
-    这么多年一路写代码，一路往前走。不用追赶所有人的节奏，保持自己的坐标系就够了。万事顺遂，永远保有热爱。
-    <br><br>点击空白处关闭
-</div>
 
-<script>
-    // ========== 这里改两个参数就行 ==========
-    const birthday = new Date('2000-05-20') // 改成他的生日
-    const starCode = "8742-9165-307" // 随便编一串专属编号
-    document.querySelector('.star-id').innerText = `恒星编号：S-${starCode}`;
+    <div class="hidden-note" id="note">
+        这里替换成你想写的私密心里话<br><br>
+        点击弹窗任意位置关闭
+    </div>
 
-    // 生命计时器
-    function updateTime(){
-      let now = Date.now();
-      let born = birthday.getTime();
-      let ms = now - born;
-      let day = Math.floor(ms/(1000*60*60*24));
-      let hour = Math.floor((ms%(1000*60*60*24))/(1000*60*60));
-      document.getElementById('liveTime').innerText = `自诞生至今，宇宙已运行 ${day} 天 ${hour} 小时`;
-    }
-    setInterval(updateTime,1000);
-    updateTime();
+    <script>
+        // ======================【仅修改下面3处内容】======================
+        const birthday = new Date('2006-07-08') // 改成对方真实生日 YYYY-MM-DD
+        const starCode = "Fjong-2006-708" // 自定义专属恒星编号
+        document.querySelector('.star-id').innerText = `恒星编号：S-${starCode}`;
+        // =================================================================
 
-    // 星空画布
-    const c = document.getElementById('canvas');
-    const ctx = c.getContext('2d');
-    function resize(){c.width=innerWidth;c.height=innerHeight;}
-    resize();
-    window.onresize = resize;
+        // 计时器：计算存活天数
+        function updateTime(){
+          let now = Date.now();
+          let born = birthday.getTime();
+          let ms = now - born;
+          let day = Math.floor(ms/(1000*60*60*24));
+          let hour = Math.floor((ms%(1000*60*60*24))/(1000*60*60));
+          document.getElementById('liveTime').innerText = `自诞生至今，宇宙已运行 ${day} 天 ${hour} 小时`;
+        }
+        setInterval(updateTime,1000);
+        updateTime();
 
-    let stars = [];
-    for(let i=0;i<1200;i++){
-      stars.push({
-        x:Math.random()*c.width,
-        y:Math.random()*c.height,
-        r:Math.random()*1.2,
-        speed:Math.random()*0.15
-      })
-    }
+        // 画布初始化
+        const c = document.getElementById('canvas');
+        const ctx = c.getContext('2d');
+        function resize(){c.width=innerWidth;c.height=innerHeight;}
+        resize();
+        window.onresize = resize;
 
-    // 中心主恒星
-    let core = {x:c.width/2,y:c.height/2};
+        // 生成基础小星星
+        let stars = [];
+        for(let i=0;i<1500;i++){
+          stars.push({
+            x:Math.random()*c.width,
+            y:Math.random()*c.height,
+            r:Math.random()*1.4,
+            speed:Math.random()*0.18
+          })
+        }
 
-    function draw(){
-      ctx.fillStyle='#000';
-      ctx.fillRect(0,0,c.width,c.height);
-      ctx.fillStyle='#fff';
-      stars.forEach(s=>{
-        ctx.beginPath();
-        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-        ctx.fill();
-        s.x -= s.speed;
-        if(s.x<0)s.x=c.width;
-      })
-      // 中心亮星
-      let grad = ctx.createRadialGradient(core.x,core.y,0,core.x,core.y,120);
-      grad.addColorStop(0,'rgba(180,210,255,0.4)');
-      grad.addColorStop(1,'rgba(180,210,255,0)');
-      ctx.fillStyle=grad;
-      ctx.beginPath();
-      ctx.arc(core.x,core.y,120,0,Math.PI*2);
-      ctx.fill();
+        // 新增行星配置（可自行修改大小、颜色、速度）
+        let planets = [
+          {x: c.width*0.2, y: c.height*0.3, r:14, color:'#ff9468', speed:0.022, orbit:80},
+          {x: c.width*0.8, y: c.height*0.6, r:20, color:'#88aaff', speed:-0.016, orbit:100},
+          {x: c.width*0.3, y: c.height*0.75, r:9, color:'#a8ffc2', speed:0.032, orbit:60},
+          {x: c.width*0.7, y: c.height*0.22, r:11, color:'#ffdd99', speed:-0.02, orbit:70}
+        ];
 
-      requestAnimationFrame(draw);
-    }
-    draw();
+        // 中心恒星
+        let core = {x:c.width/2,y:c.height/2};
 
-    // 双击打开备忘录
-    const note = document.getElementById('note');
-    document.body.ondblclick = ()=>{
-      note.style.display = 'block';
-    }
-    note.onclick = ()=> note.style.display = 'none';
-</script>
+        // 主渲染动画
+        function draw(){
+          ctx.fillStyle='#000';
+          ctx.fillRect(0,0,c.width,c.height);
+          ctx.fillStyle='#fff';
+
+          // 绘制流动小星星
+          stars.forEach(s=>{
+            ctx.beginPath();
+            ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+            ctx.fill();
+            s.x -= s.speed;
+            if(s.x<0)s.x=c.width;
+          })
+
+          // 绘制行星+光晕
+          planets.forEach(p=>{
+            p.x += p.speed;
+            if(p.x < -p.r*3) p.x = c.width + p.r*3;
+            // 行星本体
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+            // 行星外层光晕
+            let planetGrad = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*2.5);
+            planetGrad.addColorStop(0, p.color+"70");
+            planetGrad.addColorStop(1, p.color+"00");
+            ctx.beginPath();
+            ctx.arc(p.x,p.y,p.r*2.5,0,Math.PI*2);
+            ctx.fillStyle = planetGrad;
+            ctx.fill();
+          })
+
+          // 中心发光主恒星
+          let grad = ctx.createRadialGradient(core.x,core.y,0,core.x,core.y,140);
+          grad.addColorStop(0,'rgba(180,210,255,0.45)');
+          grad.addColorStop(1,'rgba(180,210,255,0)');
+          ctx.fillStyle=grad;
+          ctx.beginPath();
+          ctx.arc(core.x,core.y,140,0,Math.PI*2);
+          ctx.fill();
+
+          requestAnimationFrame(draw);
+        }
+        draw();
+
+        // 双击弹窗逻辑
+        const note = document.getElementById('note');
+        document.body.ondblclick = ()=>{
+          note.style.display = 'block';
+        }
+        note.onclick = ()=> note.style.display = 'none';
+
+        // 生日音乐播放逻辑（兼容微信自动播放限制）
+        const audio = document.getElementById('birthdayAudio');
+        window.addEventListener('load', ()=>{
+          audio.play().catch(()=>{
+            // 页面任意点击一次即可播放音乐
+            document.body.addEventListener('click', ()=>{
+              audio.play();
+            }, {once:true})
+          })
+        })
+    </script>
 </body>
 </html>
