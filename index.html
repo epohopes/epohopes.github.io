@@ -316,25 +316,24 @@
         textContainer.addEventListener('scroll', updateActiveLine);
         updateActiveLine();
 
-        // 星空画布基础
+        // 1. 画布基础变量
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         let W, H;
         let core = { x: 0, y: 0 };
 
+        // 2. 仅定义resize，不执行
         function resize() {
             W = canvas.width = window.innerWidth;
             H = canvas.height = window.innerHeight;
             core.x = W / 2;
             core.y = H / 2;
-            // 行星位置更新
             planetList.forEach(p => {
                 p.x = W * p.cfg.xRatio;
                 p.y = H * p.cfg.yRatio;
                 p.dom.style.left = p.x + 'px';
                 p.dom.style.top = p.y + 'px';
             })
-            // 宇航员位置更新
             astroList.forEach(a => {
                 a.x = W * a.cfg.xRatio;
                 a.y = H * a.cfg.yRatio;
@@ -343,7 +342,7 @@
             })
         }
 
-        // 1. 先生成星星
+        // 3. 生成星星
         let stars = [];
         for (let i = 0; i < 1500; i++) {
             stars.push({
@@ -354,7 +353,7 @@
             });
         }
 
-        // 2. 先生成全部行星DOM，初始化planetList
+        // 4. 先创建行星DOM，初始化planetList（关键前置步骤）
         const planetBox = document.getElementById('planetBox');
         let planetList = [];
         planetConfig.forEach(cfg => {
@@ -375,7 +374,7 @@
             })
         })
 
-        // 3. 先生成全部宇航员DOM，初始化astroList
+        // 5. 先创建宇航员DOM，初始化astroList
         const astroBox = document.getElementById('astroBox');
         let astroList = [];
         astroConfig.forEach(cfg => {
@@ -395,11 +394,11 @@
             })
         })
 
-        // 4. 全部数组初始化完成后，再绑定resize、执行resize
+        // 6. 全部数组创建完成后，再绑定resize、执行resize
         window.addEventListener('resize', resize);
         resize();
 
-        // 渲染循环
+        // 7. 渲染循环
         function draw() {
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, W, H);
