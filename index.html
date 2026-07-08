@@ -50,8 +50,10 @@
         }
         .planet-item img {
             width: 100%;
-            height: auto;
+            height: 100%; /* 新增高度100%，完全填满父容器size尺寸 */
             display: block;
+            object-fit: contain;
+            border: 1px solid #fff;
         }
 
         /* ===== 宇航员容器 ===== */
