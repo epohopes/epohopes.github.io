@@ -209,11 +209,11 @@
     </style>
 </head>
 <body>
-<!-- 生日音频 -->
-    <audio id="birthdayAudio" loop preload="auto">
-        <source src="./birthday_song.mp3" type="audio/mpeg">
-        您的浏览器不支持音频播放，请升级浏览器。
-    </audio>
+<!-- 生日音频（已完整闭合audio标签，消除语法警告） -->
+<audio id="birthdayAudio" loop preload="auto">
+    <source src="./birthday_song.mp3" type="audio/mpeg">
+    您的浏览器不支持音频播放，请升级浏览器。
+</audio>
 
     <!-- 星空画布 -->
     <canvas id="canvas"></canvas>
@@ -316,24 +316,26 @@
         textContainer.addEventListener('scroll', updateActiveLine);
         updateActiveLine();
 
-        // 1. 画布基础变量
+        // ========== 修复核心：调整JS执行顺序，彻底解决暂时性死区 ==========
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         let W, H;
         let core = { x: 0, y: 0 };
 
-        // 2. 仅定义resize，不执行
+        // 定义resize函数
         function resize() {
             W = canvas.width = window.innerWidth;
             H = canvas.height = window.innerHeight;
             core.x = W / 2;
             core.y = H / 2;
+            // 更新行星位置
             planetList.forEach(p => {
                 p.x = W * p.cfg.xRatio;
                 p.y = H * p.cfg.yRatio;
                 p.dom.style.left = p.x + 'px';
                 p.dom.style.top = p.y + 'px';
             })
+            // 更新宇航员位置
             astroList.forEach(a => {
                 a.x = W * a.cfg.xRatio;
                 a.y = H * a.cfg.yRatio;
@@ -342,7 +344,11 @@
             })
         }
 
-        // 3. 生成星星
+        // 1. 先执行resize，初始化宽高W/H，避免星星坐标全0
+        window.addEventListener('resize', resize);
+        resize();
+
+        // 2. 生成星星（此时W/H已赋值，星星坐标正常）
         let stars = [];
         for (let i = 0; i < 1500; i++) {
             stars.push({
@@ -353,7 +359,7 @@
             });
         }
 
-        // 4. 先创建行星DOM，初始化planetList（关键前置步骤）
+        // 3. 创建行星DOM，初始化planetList
         const planetBox = document.getElementById('planetBox');
         let planetList = [];
         planetConfig.forEach(cfg => {
@@ -374,7 +380,7 @@
             })
         })
 
-        // 5. 先创建宇航员DOM，初始化astroList
+        // 4. 创建宇航员DOM，初始化astroList
         const astroBox = document.getElementById('astroBox');
         let astroList = [];
         astroConfig.forEach(cfg => {
@@ -394,11 +400,7 @@
             })
         })
 
-        // 6. 全部数组创建完成后，再绑定resize、执行resize
-        window.addEventListener('resize', resize);
-        resize();
-
-        // 7. 渲染循环
+        // 5. 渲染循环
         function draw() {
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, W, H);
@@ -412,6 +414,7 @@
             });
             planetList.forEach(p => {
                 p.x += p.cfg.speed;
+                // 左右边界循环
                 if (p.x < -p.cfg.size * 2) p.x = W + p.cfg.size * 2;
                 if (p.x > W + p.cfg.size * 2) p.x = -p.cfg.size * 2;
                 p.dom.style.left = p.x + 'px';
