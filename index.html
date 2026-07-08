@@ -61,9 +61,17 @@
             margin: 0;
             display: none;
         }
-        /* 主页面默认隐藏，解锁后展示 */
+        /* 核心修复：不用display:none，页面永久保留布局尺寸，canvas不会归零 */
         .page-main {
-            display: none;
+            visibility: hidden;
+            pointer-events: none;
+            opacity: 0;
+        }
+        /* 解锁后切换为可见 */
+        .page-main.show {
+            visibility: visible;
+            pointer-events: auto;
+            opacity: 1;
         }
 
         /* ===== Canvas 星空背景 ===== */
@@ -159,6 +167,7 @@
             scrollbar-width: thin;
             scrollbar-color: rgba(176, 196, 222, 0.4) rgba(255, 255, 255, 0.05);
             scroll-snap-type: y mandatory;
+            text-align: center; /* 主文本居中 */
         }
         .text-line {
             scroll-snap-align: center;
@@ -187,7 +196,7 @@
         }
 
         .timer {
-            margin-top: 80px;
+            margin-top: 120px; /* 拉开距离不重叠 */
             font-size: 14px;
             opacity: 1;
             user-select: none;
@@ -199,6 +208,9 @@
         .hint {
             position: absolute;
             bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
             font-size: 13px;
             opacity: 1;
             user-select: none;
@@ -267,7 +279,7 @@
     <p class="tip">密码错误，请重新输入</p>
 </div>
 
-<!-- 全部页面内容容器，初始隐藏 -->
+<!-- 全部页面内容容器，初始透明不可交互，保留布局尺寸 -->
 <div class="page-main" id="pageMain">
     <audio id="birthdayAudio" loop preload="auto">
         <source src="https://epohopes.github.io/birthday_song.mp3" type="audio/mpeg">
@@ -301,7 +313,15 @@
             <div class="text-line">一岁一礼，一寸欢喜；</div>
             <div class="text-line">无忧无疾，不离笑颜。</div>
             <div class="text-line">健康成长，年少有为。</div>
+            <div class="text-line"></div>
+            <div class="text-line">单次随机相遇概率 = 一生遇见人数 ÷ 全球总人口</div>
+            <div class="text-line">= 80000 ÷ 8000000000</div>
+            <div class="text-line">= 0.00001</div>
+            <div class="text-line">= 1/100000（十万分之一）</div>
+            <div class="text-line"></div>
+            <div class="text-line">点击弹窗任意位置关闭</div>
         </div>
+</div>
 
 <script>
     // ========== 密码解锁配置 ==========
@@ -312,17 +332,18 @@
     const unlockBtn = document.getElementById("unlockBtn");
     const tipText = document.querySelector(".password-box .tip");
 
+    // 页面先初始化画布、星球、文字（页面永久有尺寸，不会黑屏）
+    initPageScript();
+
     function unlockPage() {
         const inputVal = pwdInput.value.trim();
         if (inputVal === correctPassword) {
-            pageMain.style.display = "block";
-            // 修复1：直接移除密码弹窗DOM，彻底消除层级遮挡
+            // 解锁：显示主页面，移除密码框
+            pageMain.classList.add("show");
             pwdBox.remove();
             tipText.style.display = "none";
-            // 双层延时，等待页面渲染完成再初始化画布
-            setTimeout(() => {
-                initPageScript();
-            }, 100);
+            // 强制刷新一次画布尺寸
+            resize();
         } else {
             tipText.style.display = "block";
             pwdInput.value = "";
@@ -333,7 +354,7 @@
         if (e.key === "Enter") unlockPage();
     });
 
-    // 页面核心逻辑，密码解锁后执行
+    // 页面核心逻辑，页面加载立刻执行（不再延时）
     function initPageScript() {
         // ===================== 自定义配置区 =====================
         const birthday = new Date('2006-07-08');
@@ -412,7 +433,7 @@
         let W, H;
         let core = { x: 0, y: 0 };
 
-        function resize() {
+        window.resize = function resize() {
             W = canvas.width = window.innerWidth;
             H = canvas.height = window.innerHeight;
             core.x = W / 2;
@@ -473,8 +494,6 @@
 
         window.addEventListener('resize', resize);
         resize();
-        // 二次延时强制刷新画布尺寸
-        setTimeout(resize, 150);
 
         // 生成星空点位
         for (let i = 0; i < 1500; i++) {
