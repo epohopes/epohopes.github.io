@@ -80,7 +80,7 @@
     </style>
 </head>
 <body>
-<!-- 生日背景音乐 -->
+<!-- 生日背景音乐 已补全闭合标签 -->
 <audio id="birthdayAudio" loop preload="auto">
     <source src="./birthday_song.mp3" type="audio/mpeg">
 
@@ -214,15 +214,17 @@
         }
         note.onclick = ()=> note.style.display = 'none';
 
-        // 生日音乐播放逻辑（兼容微信自动播放限制）
+        // 生日音乐播放逻辑（优化：全局点击一次播放，兼容微信）
         const audio = document.getElementById('birthdayAudio');
-        window.addEventListener('load', ()=>{
-          audio.play().catch(()=>{
-            // 页面任意点击一次即可播放音乐
-            document.body.addEventListener('click', ()=>{
-              audio.play();
-            }, {once:true})
-          })
+        let audioPlayed = false;
+        // 全局任意点击触发播放
+        document.body.addEventListener('click', function playAudioOnce(){
+            if(!audioPlayed){
+                audio.play();
+                audioPlayed = true;
+                // 只执行一次，移除监听
+                document.body.removeEventListener('click', playAudioOnce);
+            }
         })
     </script>
 </body>
