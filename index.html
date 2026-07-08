@@ -89,7 +89,7 @@
         /* ===== 文字内容层 ===== */
         .wrap {
             position: relative;
-            z-index: 2;
+            z-index:99;
             width: 100%;
             height: 100%;
             display: flex;
@@ -103,8 +103,9 @@
         .star-id {
             font-size: 16px;
             letter-spacing: 4px;
-            opacity: 0.6;
+            opacity: 1;
             margin-bottom: 24px;
+            color: #ffffff; /* 纯白色 */
             user-select: none;
         }
 
@@ -114,7 +115,8 @@
             overflow-y: auto;
             line-height: 2.2;
             font-size: 24px;
-            opacity: 0.9;
+            opacity: 1;
+            color: #ffffff;
             padding: 10px 20px;
             scrollbar-width: thin;
             scrollbar-color: rgba(176, 196, 222, 0.4) rgba(255, 255, 255, 0.05);
@@ -130,7 +132,7 @@
         .text-line.active {
             font-size: 28px;
             opacity: 1;
-            color: #e0edff;
+            color: #ffffff;
             text-shadow: 0 0 12px rgba(200, 220, 255, 0.6);
         }
         .main-text::-webkit-scrollbar {
@@ -147,7 +149,7 @@
         .timer {
             margin-top: 40px;
             font-size: 14px;
-            opacity: 0.6;
+            opacity: 1;
             user-select: none;
         }
 
@@ -155,7 +157,7 @@
             position: absolute;
             bottom: 30px;
             font-size: 13px;
-            opacity: 0.35;
+            opacity: 1;
             user-select: none;
         }
 
@@ -222,20 +224,22 @@
     <div id="astroBox"></div>
 
     <div class="wrap">
-        <div class="star-id" id="starId">恒星编号：S-Fjong-2006-708</div>
+        <div class="star-id" id="starId">恒星编号：S-Fjiong-2006-708</div>
         <div class="main-text" id="mainText">
-            <div class="text-line">写给你的生日祝福</div>
+            <div class="text-line">祝方炯同学20岁生日快乐！</div>
             <div class="text-line">茫茫星海亿万光年</div>
             <div class="text-line">能与你相遇是极小概率的奇迹</div>
-            <div class="text-line">祝你岁岁平安，生日快乐</div>
-            <div class="text-line">往后每一年的星空，都有我陪你看</div>
+            <div class="text-line">祝你岁岁平安，生日快乐!</div>
         </div>
         <div class="timer" id="liveTime">计算中...</div>
         <div class="hint">双击星空打开私人备忘录 · 点击页面播放生日歌</div>
     </div>
 
     <div class="hidden-note" id="note">
-        这里替换成你想写的私密心里话<br><br>
+        愿你：
+        一岁一礼，一寸欢喜；
+        无忧无疾，不离笑颜。
+        健康成长，年少有为。<br><br>
         点击弹窗任意位置关闭
     </div>
 
@@ -252,14 +256,14 @@
             { img:'https://epohopes.github.io/planet4.png', xRatio:0.7, yRatio:0.22, speed:-0.003 },
             { img:'https://epohopes.github.io/planet5.png', xRatio:0.15, yRatio:0.55, speed:0.003 },
             { img:'https://epohopes.github.io/planet6.png', xRatio:0.85, yRatio:0.4, speed:-0.004 },
-            { img:'https://epohopes.github.io/planet7.png', xRatio:0.45, yRatio:0.25, speed:0.004 },
+            { img:'https://epohopes.github.io/planet7.png', xRatio:0.15, yRatio:0.25, speed:0.004 },
             { img:'https://epohopes.github.io/planet8.png', xRatio:0.05, yRatio:0.15, speed:0.002 },
             { img:'https://epohopes.github.io/planet9.png', xRatio:0.9, yRatio:0.7, speed:-0.002 },
             { img:'https://epohopes.github.io/planet10.png',xRatio:0.55, yRatio:0.8, speed:0.005 },
             { img:'https://epohopes.github.io/planet11.png',xRatio:0.1, yRatio:0.3, speed:-0.003 },
             { img:'https://epohopes.github.io/planet12.png',xRatio:0.6, yRatio:0.15, speed:0.004 },
             { img:'https://epohopes.github.io/planet13.png',xRatio:0.92, yRatio:0.32, speed:-0.004 },
-            { img:'https://epohopes.github.io/planet14.png',xRatio:0.4, yRatio:0.62, speed:0.003 },
+            { img:'https://epohopes.github.io/planet14.png',xRatio:0.25, yRatio:0.62, speed:0.003 },
             { img:'https://epohopes.github.io/planet15.png',xRatio:0.25, yRatio:0.88, speed:-0.005 },
             { img:'https://epohopes.github.io/planet16.png',xRatio:0.78, yRatio:0.48, speed:0.004 }
         ];
