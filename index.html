@@ -272,7 +272,7 @@
     <audio id="birthdayAudio" loop preload="auto">
         <source src="https://epohopes.github.io/birthday_song.mp3" type="audio/mpeg">
         您的浏览器不支持音频播放，请升级浏览器。
-
+    </audio>
 
         <canvas id="canvas"></canvas>
         <div id="planetBox"></div>
@@ -301,12 +301,13 @@
             <div class="text-line">一岁一礼，一寸欢喜；</div>
             <div class="text-line">无忧无疾，不离笑颜。</div>
             <div class="text-line">健康成长，年少有为。</div>
+            <div class="text-line"></div>
         </div>
 
 
 <script>
     // ========== 密码解锁配置 ==========
-    const correctPassword = "0708"; // 修改此处自定义密码
+    const correctPassword = "0708";
     const pwdBox = document.getElementById("pwdBox");
     const pageMain = document.getElementById("pageMain");
     const pwdInput = document.getElementById("pwdInput");
@@ -317,12 +318,13 @@
         const inputVal = pwdInput.value.trim();
         if (inputVal === correctPassword) {
             pageMain.style.display = "block";
-            pwdBox.style.display = "none";
+            // 修复1：直接移除密码弹窗DOM，彻底消除层级遮挡
+            pwdBox.remove();
             tipText.style.display = "none";
-            // 延时50ms，等待浏览器重排DOM，再初始化画布
+            // 双层延时，等待页面渲染完成再初始化画布
             setTimeout(() => {
                 initPageScript();
-            }, 50);
+            }, 100);
         } else {
             tipText.style.display = "block";
             pwdInput.value = "";
@@ -368,7 +370,6 @@
             { img:"https://epohopes.github.io/astronaut6.png", xRatio:0.82, yRatio:0.52, delay:"3s" },
             { img:"https://epohopes.github.io/astronaut7.png", xRatio:0.48, yRatio:0.32, delay:"3.6s" }
         ];
-        // ========================================================
 
         document.getElementById('starId').innerText = `恒星编号：S-${starCode}`;
 
@@ -474,8 +475,8 @@
 
         window.addEventListener('resize', resize);
         resize();
-        // 修复关键：解锁后手动再执行一次resize，强制刷新画布尺寸
-        setTimeout(resize, 100);
+        // 二次延时强制刷新画布尺寸
+        setTimeout(resize, 150);
 
         // 生成星空点位
         for (let i = 0; i < 1500; i++) {
