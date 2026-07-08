@@ -90,7 +90,7 @@
             animation: float 4s ease-in-out infinite;
             opacity: 0.75;
         }
-        /* 删除原planetSpin自转动画，只保留float浮动动画 */
+        /* 统一浮动动画，只定义一次 */
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-14px); }
@@ -100,7 +100,6 @@
             width: 90px;
             height: auto;
             object-fit: contain;
-            /* border: 2px solid #fff; 调试完可删除 */
         }
 
         /* ===== 宇航员容器 ===== */
@@ -110,7 +109,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 3; /* 提升层级，覆盖文字 */
+            z-index: 3;
             pointer-events: none;
         }
         .astro-item {
@@ -144,7 +143,7 @@
             letter-spacing: 4px;
             opacity: 1;
             margin-bottom: 24px;
-            color: #ffffff; /* 纯白色 */
+            color: #ffffff;
             user-select: none;
         }
 
@@ -160,6 +159,7 @@
             scrollbar-width: thin;
             scrollbar-color: rgba(176, 196, 222, 0.4) rgba(255, 255, 255, 0.05);
             scroll-snap-type: y mandatory;
+            text-align: center; /* 新增：主文本全部居中 */
         }
         .text-line {
             scroll-snap-align: center;
@@ -168,6 +168,7 @@
             opacity: 1;
             color: #ffffff;
             font-size: 22px;
+            margin: 8px 0;
         }
         .text-line.active {
             font-size: 28px;
@@ -187,18 +188,25 @@
         }
 
         .timer {
-            margin-top: 80px;
+            margin-top: 120px; /* 加大上边距，远离上方文字，不再重叠 */
             font-size: 14px;
             opacity: 1;
             user-select: none;
+            white-space: pre-line;
+            line-height: 1.8;
+            color: #fff;
         }
 
         .hint {
             position: absolute;
             bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
             font-size: 13px;
             opacity: 1;
             user-select: none;
+            color: #fff;
         }
 
         /* ===== 备忘录弹窗 ===== */
@@ -212,7 +220,7 @@
             border: 1px solid #445577;
             max-width: 550px;
             width: 90%;
-            z-index: 99999; /* 全局最高层级，所有元素盖不住 */
+            z-index: 99999;
             display: none;
             font-size: 22px;
             line-height: 2;
@@ -266,7 +274,6 @@
 <!-- 全部页面内容容器，初始隐藏 -->
 <div class="page-main" id="pageMain">
     <audio id="birthdayAudio" loop preload="auto">
-        <!-- 音频替换为绝对地址 -->
         <source src="https://epohopes.github.io/birthday_song.mp3" type="audio/mpeg">
         您的浏览器不支持音频播放，请升级浏览器。
 
@@ -313,8 +320,10 @@
         const inputVal = pwdInput.value.trim();
         if (inputVal === correctPassword) {
             pageMain.style.display = "block";
-            pwdBox.remove(); // 彻底移除密码框，杜绝遮挡
+            // 修复1：直接移除密码弹窗DOM，彻底消除层级遮挡
+            pwdBox.remove();
             tipText.style.display = "none";
+            // 双层延时，等待页面渲染完成再初始化画布
             setTimeout(() => {
                 initPageScript();
             }, 100);
@@ -328,9 +337,9 @@
         if (e.key === "Enter") unlockPage();
     });
 
-    // 页面核心逻辑，密码解锁后执行（原有文本、配置、渲染逻辑完全不变）
+    // 页面核心逻辑，密码解锁后执行
     function initPageScript() {
-        // ===================== 自定义配置区（全部图片改为绝对线上地址） =====================
+        // ===================== 自定义配置区 =====================
         const birthday = new Date('2006-07-08');
         const starCode = 'Fjiong-2006-708';
 
@@ -347,13 +356,13 @@
             { img:'https://epohopes.github.io/planet9.png', xRatio:0.9, yRatio:0.7, speed:-0.002 },
             { img:'https://epohopes.github.io/planet10.png',xRatio:0.55, yRatio:0.8, speed:0.005 },
             { img:'https://epohopes.github.io/planet11.png',xRatio:0.1, yRatio:0.3, speed:-0.003 },
-            { img:'https://epohopes.github.io/planet12.png',xRatio:0.6, yRatio:0.3, speed:0.004 },
+            { img:'https://epohopes.github.io/planet12.png',xRatio:0.6, yRatio:0.15, speed:0.004 },
             { img:'https://epohopes.github.io/planet13.png',xRatio:0.92, yRatio:0.32, speed:-0.004 },
             { img:'https://epohopes.github.io/planet14.png',xRatio:0.25, yRatio:0.62, speed:0.003 },
             { img:'https://epohopes.github.io/planet15.png',xRatio:0.25, yRatio:0.88, speed:-0.005 },
             { img:'https://epohopes.github.io/planet16.png',xRatio:0.78, yRatio:0.48, speed:0.004 }
         ];
-        // 7张宇航员参数 - 完整CDN路径，全部永久悬浮显示
+        // 7张宇航员参数 - 完整CDN路径
         const astroConfig = [
             { img:"https://epohopes.github.io/astronaut1.png", xRatio:0.12, yRatio:0.2, delay:"0s" },
             { img:"https://epohopes.github.io/astronaut2.png", xRatio:0.88, yRatio:0.28, delay:"0.6s" },
@@ -363,7 +372,6 @@
             { img:"https://epohopes.github.io/astronaut6.png", xRatio:0.82, yRatio:0.52, delay:"3s" },
             { img:"https://epohopes.github.io/astronaut7.png", xRatio:0.48, yRatio:0.32, delay:"3.6s" }
         ];
-        // ========================================================
 
         document.getElementById('starId').innerText = `恒星编号：S-${starCode}`;
 
@@ -399,7 +407,6 @@
         textContainer.addEventListener('scroll', updateActiveLine);
         updateActiveLine();
 
-        // ========== 核心修复：严格顺序，彻底消除 planetList 暂时性死区 ==========
         let planetList = [];
         let astroList = [];
         let stars = [];
@@ -448,7 +455,7 @@
                 dom: wrap
             })
         })
-        // 生成宇航员DOM + 加载失败日志，无隐藏逻辑，全部永久渲染
+        // 生成宇航员DOM
         const astroBox = document.getElementById('astroBox');
         astroConfig.forEach(cfg => {
             const wrap = document.createElement('div');
@@ -457,7 +464,6 @@
             const img = document.createElement('img');
             img.src = cfg.img;
             img.alt = "宇航员";
-            // 图片加载失败捕获
             img.onerror = () => console.error("宇航员资源加载失败：", cfg.img);
             wrap.appendChild(img);
             astroBox.appendChild(wrap);
@@ -471,7 +477,8 @@
 
         window.addEventListener('resize', resize);
         resize();
-        setTimeout(resize, 150); // 二次强制刷新画布尺寸，解决黑屏
+        // 二次延时强制刷新画布尺寸
+        setTimeout(resize, 150);
 
         // 生成星空点位
         for (let i = 0; i < 1500; i++) {
@@ -495,10 +502,12 @@
                 s.x -= s.speed;
                 if (s.x < 0) s.x = W;
             });
+            // 行星横向移动边界修正（固定宽度90px）
             planetList.forEach(p => {
                 p.x += p.cfg.speed;
-                if (p.x < -180) p.x = W + 180;
-                if (p.x > W + 180) p.x = -180;
+                const width = 90;
+                if (p.x < -width * 2) p.x = W + width * 2;
+                if (p.x > W + width * 2) p.x = -width * 2;
                 p.dom.style.left = p.x + 'px';
                 p.dom.style.top = p.y + 'px';
             })
@@ -513,19 +522,16 @@
         });
         // 点击弹窗任意位置关闭
         note.addEventListener('click', function(e) {
-            e.stopPropagation(); // 阻止点击穿透到背景，同时关闭弹窗
+            e.stopPropagation();
             this.style.display = 'none';
         });
 
-        // 点击播放音频
+        // 点击切换音乐播放/暂停
         const audio = document.getElementById('birthdayAudio');
         let audioPlayed = false;
 
-        // 页面背景点击切换音乐
         document.addEventListener('click', function(e) {
-            // 如果点击的是备忘录弹窗，不执行音乐切换
             if(e.target.closest('#note')) return;
-
             if (!audioPlayed) {
                 audio.play().then(() => {
                     audioPlayed = true;
