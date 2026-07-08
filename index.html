@@ -36,7 +36,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 2.5;
+            z-index: 4;
             pointer-events: none;
         }
         .planet-item {
@@ -50,10 +50,10 @@
         }
         .planet-item img {
             width: 100%;
-            height: 100%; /* 新增高度100%，完全填满父容器size尺寸 */
+            height: 100%;
             display: block;
             object-fit: contain;
-            border: 1px solid #fff;
+            border: 2px solid #fff; /* 加粗白色边框，一眼看见行星框 */
         }
 
         /* ===== 宇航员容器 ===== */
@@ -243,22 +243,22 @@
 
         // 16颗行星参数 - 完整CDN路径
         const planetConfig = [
-            { img:'https://epohopes.github.io/planet1.png', xRatio:0.2, yRatio:0.3, speed:0.012, size:420, spinTime:12 },
-            { img:'https://epohopes.github.io/planet2.png', xRatio:0.8, yRatio:0.6, speed:-0.010, size:560, spinTime:14 },
-            { img:'https://epohopes.github.io/planet3.png', xRatio:0.3, yRatio:0.75, speed:0.015, size:400, spinTime:10 },
-            { img:'https://epohopes.github.io/planet4.png', xRatio:0.7, yRatio:0.22, speed:-0.009, size:360, spinTime:16 },
-            { img:'https://epohopes.github.io/planet5.png', xRatio:0.15, yRatio:0.55, speed:0.008, size:380, spinTime:11 },
-            { img:'https://epohopes.github.io/planet6.png', xRatio:0.85, yRatio:0.4, speed:-0.011, size:340, spinTime:13 },
-            { img:'https://epohopes.github.io/planet7.png', xRatio:0.45, yRatio:0.25, speed:0.010, size:480, spinTime:15 },
-            { img:'https://epohopes.github.io/planet8.png', xRatio:0.05, yRatio:0.15, speed:0.007, size:300, spinTime:9 },
-            { img:'https://epohopes.github.io/planet9.png', xRatio:0.9, yRatio:0.7, speed:-0.006, size:320, spinTime:12 },
-            { img:'https://epohopes.github.io/planet10.png',xRatio:0.55, yRatio:0.8, speed:0.013, size:440, spinTime:14 },
-            { img:'https://epohopes.github.io/planet11.png',xRatio:0.1, yRatio:0.3, speed:-0.009, size:350, spinTime:13 },
-            { img:'https://epohopes.github.io/planet12.png',xRatio:0.6, yRatio:0.15, speed:0.011, size:410, spinTime:11 },
-            { img:'https://epohopes.github.io/planet13.png',xRatio:0.92, yRatio:0.32, speed:-0.010, size:330, spinTime:15 },
-            { img:'https://epohopes.github.io/planet14.png',xRatio:0.4, yRatio:0.62, speed:0.008, size:390, spinTime:10 },
-            { img:'https://epohopes.github.io/planet15.png',xRatio:0.25, yRatio:0.88, speed:-0.012, size:310, spinTime:14 },
-            { img:'https://epohopes.github.io/planet16.png',xRatio:0.78, yRatio:0.48, speed:0.010, size:450, spinTime:12 }
+            { img:'https://epohopes.github.io/planet1.png', xRatio:0.2, yRatio:0.3, speed:0.005, size:80, spinTime:12 },
+            { img:'https://epohopes.github.io/planet2.png', xRatio:0.8, yRatio:0.6, speed:-0.004, size:90, spinTime:14 },
+            { img:'https://epohopes.github.io/planet3.png', xRatio:0.3, yRatio:0.75, speed:0.006, size:75, spinTime:10 },
+            { img:'https://epohopes.github.io/planet4.png', xRatio:0.7, yRatio:0.22, speed:-0.003, size:70, spinTime:16 },
+            { img:'https://epohopes.github.io/planet5.png', xRatio:0.15, yRatio:0.55, speed:0.003, size:72, spinTime:11 },
+            { img:'https://epohopes.github.io/planet6.png', xRatio:0.85, yRatio:0.4, speed:-0.004, size:68, spinTime:13 },
+            { img:'https://epohopes.github.io/planet7.png', xRatio:0.45, yRatio:0.25, speed:0.004, size:95, spinTime:15 },
+            { img:'https://epohopes.github.io/planet8.png', xRatio:0.05, yRatio:0.15, speed:0.002, size:60, spinTime:9 },
+            { img:'https://epohopes.github.io/planet9.png', xRatio:0.9, yRatio:0.7, speed:-0.002, size:65, spinTime:12 },
+            { img:'https://epohopes.github.io/planet10.png',xRatio:0.55, yRatio:0.8, speed:0.005, size:82, spinTime:14 },
+            { img:'https://epohopes.github.io/planet11.png',xRatio:0.1, yRatio:0.3, speed:-0.003, size:66, spinTime:13 },
+            { img:'https://epohopes.github.io/planet12.png',xRatio:0.6, yRatio:0.15, speed:0.004, size:78, spinTime:11 },
+            { img:'https://epohopes.github.io/planet13.png',xRatio:0.92, yRatio:0.32, speed:-0.004, size:64, spinTime:15 },
+            { img:'https://epohopes.github.io/planet14.png',xRatio:0.4, yRatio:0.62, speed:0.003, size:74, spinTime:10 },
+            { img:'https://epohopes.github.io/planet15.png',xRatio:0.25, yRatio:0.88, speed:-0.005, size:62, spinTime:14 },
+            { img:'https://epohopes.github.io/planet16.png',xRatio:0.78, yRatio:0.48, speed:0.004, size:85, spinTime:12 }
         ];
 
         // 7张宇航员参数 - 完整CDN路径，全部永久悬浮显示
