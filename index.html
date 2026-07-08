@@ -303,6 +303,7 @@
             <div class="text-line">健康成长，年少有为。</div>
         </div>
 
+
 <script>
     // ========== 密码解锁配置 ==========
     const correctPassword = "0708"; // 修改此处自定义密码
@@ -318,8 +319,10 @@
             pageMain.style.display = "block";
             pwdBox.style.display = "none";
             tipText.style.display = "none";
-            // 解锁后初始化页面动画、计时
-            initPageScript();
+            // 延时50ms，等待浏览器重排DOM，再初始化画布
+            setTimeout(() => {
+                initPageScript();
+            }, 50);
         } else {
             tipText.style.display = "block";
             pwdInput.value = "";
@@ -471,6 +474,8 @@
 
         window.addEventListener('resize', resize);
         resize();
+        // 修复关键：解锁后手动再执行一次resize，强制刷新画布尺寸
+        setTimeout(resize, 100);
 
         // 生成星空点位
         for (let i = 0; i < 1500; i++) {
