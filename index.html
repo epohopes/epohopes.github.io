@@ -118,7 +118,7 @@
             opacity: 0.8;
         }
 
-        /* ===== 文字内容层 ===== */
+        /* ===== 文字内容层 布局调整 ===== */
         .wrap {
             position: relative;
             z-index: 4;
@@ -126,10 +126,17 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            /* 垂直空间均分，主文本居中 */
+            justify-content: space-around;
             align-items: center;
             text-align: center;
             padding: 20px;
+        }
+        /* 中间文本容器单独块 */
+        .text-middle-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .star-id {
             font-size: 16px;
@@ -174,14 +181,16 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
+        /* 计时器大幅拉开距离，不和主文本重叠 */
         .timer {
-            margin-top: 120px;
+            margin-top: 180px;
             font-size: 14px;
             user-select: none;
             white-space: pre-line;
             line-height: 1.8;
             color: #fff;
         }
+        /* 底部提示固定在最下方，和计时器完全分离 */
         .hint {
             position: absolute;
             bottom: 30px;
@@ -239,6 +248,9 @@
             .astro-item img {
                 width: 70px;
             }
+            .timer {
+                margin-top: 120px;
+            }
         }
     </style>
 </head>
@@ -255,52 +267,50 @@
 <!-- 主页面 -->
 <div class="page-main" id="pageMain">
 
-    <!-- ✅ 修复：音频独立，不再包裹其他元素 -->
+    <!-- 音频 -->
     <audio id="birthdayAudio" loop preload="auto" style="display:none;">
         <source src="https://epohopes.github.io/birthday_song.mp3" type="audio/mpeg" />
         您的浏览器不支持音频播放，请升级浏览器。
-    </audio>
 
-    <canvas id="canvas"></canvas>
-    <div id="planetBox"></div>
-    <div id="astroBox"></div>
 
-    <div class="wrap">
-        <div class="star-id" id="starId">恒星编号：S-Fjiong-2006-708</div>
-        <div class="main-text" id="mainText">
-            <div class="text-line">祝方炯同学20岁生日快乐！</div>
-            <div class="text-line">茫茫星海亿万光年</div>
-            <div class="text-line">能与你相遇是极小概率的奇迹</div>
-            <div class="text-line">全球总人口 ≈ 80 亿 = 8000000000 人</div>
-            <div class="text-line">人的一生平均会遇见 80000 人</div>
-            <div class="text-line">单次随机相遇概率 = 一生遇见人数 ÷ 全球总人口</div>
-            <div class="text-line">= 80000 ÷ 8000000000</div>
-            <div class="text-line">= 0.00001</div>
-            <div class="text-line">= 1/100000（十万分之一）</div>
-            <div class="text-line">祝你岁岁平安，生日快乐！</div>
+        <canvas id="canvas"></canvas>
+        <div id="planetBox"></div>
+        <div id="astroBox"></div>
+
+        <div class="wrap">
+            <!-- 中间所有文本包裹统一居中 -->
+            <div class="text-middle-block">
+                <div class="star-id" id="starId">恒星编号：S-Fjiong-2006-708</div>
+                <div class="main-text" id="mainText">
+                    <div class="text-line">祝方炯同学20岁生日快乐！</div>
+                    <div class="text-line">茫茫星海亿万光年</div>
+                    <div class="text-line">能与你相遇是极小概率的奇迹</div>
+                    <div class="text-line">全球总人口 ≈ 80 亿 = 8000000000 人</div>
+                    <div class="text-line">人的一生平均会遇见 80000 人</div>
+                    <div class="text-line">单次随机相遇概率 = 一生遇见人数 ÷ 全球总人口</div>
+                    <div class="text-line">= 80000 ÷ 8000000000</div>
+                    <div class="text-line">= 0.00001</div>
+                    <div class="text-line">= 1/100000（十万分之一）</div>
+                    <div class="text-line">祝你岁岁平安，生日快乐！</div>
+                </div>
+            </div>
+            <!-- 计时器单独靠下，和主文本拉开超大间距 -->
+            <div class="timer" id="liveTime">计算中...</div>
+            <!-- 底部提示固定最底部，完全不重叠 -->
+            <div class="hint">双击星空打开私人备忘录 · 点击页面播放生日歌</div>
         </div>
-        <div class="timer" id="liveTime">计算中...</div>
-        <div class="hint">双击星空打开私人备忘录 · 点击页面播放生日歌</div>
-    </div>
 
-    <div class="hidden-note" id="note">
-        <div class="text-line">愿你：</div>
-        <div class="text-line">一岁一礼，一寸欢喜；</div>
-        <div class="text-line">无忧无疾，不离笑颜。</div>
-        <div class="text-line">健康成长，年少有为。</div>
-        <div class="text-line"></div>
-        <div class="text-line">单次随机相遇概率 = 一生遇见人数 ÷ 全球总人口</div>
-        <div class="text-line">= 80000 ÷ 8000000000</div>
-        <div class="text-line">= 0.00001</div>
-        <div class="text-line">= 1/100000（十万分之一）</div>
-        <div class="text-line"></div>
-        <div class="text-line">点击弹窗任意位置关闭</div>
-    </div>
-</div>
+        <div class="hidden-note" id="note">
+            <div class="text-line">愿你：</div>
+            <div class="text-line">一岁一礼，一寸欢喜；</div>
+            <div class="text-line">无忧无疾，不离笑颜。</div>
+            <div class="text-line">健康成长，年少有为。</div>
+        </div>
+
 
 <script>
     // ==================== 密码解锁 ====================
-    const correctPassword = "fangjiong20";
+    const correctPassword = "0708";
     const pwdBox = document.getElementById("pwdBox");
     const pageMain = document.getElementById("pageMain");
     const pwdInput = document.getElementById("pwdInput");
@@ -358,7 +368,7 @@
             { img: "https://epohopes.github.io/astronaut2.png", xRatio: 0.88, yRatio: 0.28, delay: "0.6s" },
             { img: "https://epohopes.github.io/astronaut3.png", xRatio: 0.08, yRatio: 0.65, delay: "1.2s" },
             { img: "https://epohopes.github.io/astronaut4.png", xRatio: 0.91, yRatio: 0.72, delay: "1.8s" },
-            { img: "https://epohopes.github.io/astronaut5.png", xRatio: 0.18, yRatio: 0.45, delay: "2.4s" },
+            { img: "https://epohopes.github.io/astronaut5.png", xRatio: 0.15, yRatio: 0.45, delay: "2.4s" },
             { img: "https://epohopes.github.io/astronaut6.png", xRatio: 0.82, yRatio: 0.52, delay: "3s" },
             { img: "https://epohopes.github.io/astronaut7.png", xRatio: 0.48, yRatio: 0.32, delay: "3.6s" }
         ];
