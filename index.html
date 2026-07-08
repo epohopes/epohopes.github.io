@@ -320,9 +320,15 @@
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         let W, H;
+        // 提前初始化core，解决Cannot access 'core' before initialization
+        let core = { x: 0, y: 0 };
+
         function resize() {
             W = canvas.width = window.innerWidth;
             H = canvas.height = window.innerHeight;
+            // 重置中心恒星坐标
+            core.x = W / 2;
+            core.y = H / 2;
             // 窗口缩放同步更新所有行星位置
             planetList.forEach(p => {
                 p.x = W * p.cfg.xRatio;
@@ -338,6 +344,7 @@
                 a.dom.style.top = a.y + 'px';
             })
         }
+        // 先定义core，再绑定resize、执行resize
         window.addEventListener('resize', resize);
         resize();
 
