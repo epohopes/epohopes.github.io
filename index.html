@@ -169,19 +169,21 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: rgba(10, 15, 25, 0.95);
-            padding: 32px;
+            padding: 40px 30px;
             border: 1px solid #445577;
-            max-width: 500px;
+            max-width: 550px;
             width: 90%;
-            z-index: 9999;
+            z-index: 99999; /* 全局最高层级，所有元素盖不住 */
             display: none;
-            font-size: 18px;
-            line-height: 1.8;
-            border-radius: 8px;
-            box-shadow: 0 0 60px rgba(68, 85, 119, 0.3);
-            backdrop-filter: blur(4px);
+            font-size: 22px;
+            line-height: 2;
+            border-radius: 10px;
+            box-shadow: 0 0 80px rgba(68, 85, 119, 0.4);
+            backdrop-filter: blur(6px);
             cursor: pointer;
             user-select: none;
+            color: #fff;
+            text-align: center;
         }
 
         /* ===== 移动端适配 ===== */
@@ -429,33 +431,44 @@
 
         // 双击备忘录弹窗
         const note = document.getElementById('note');
-        document.body.addEventListener('dblclick', () => note.style.display = 'block');
-        note.addEventListener('click', () => note.style.display = 'none');
+        document.body.addEventListener('dblclick', () => {
+            note.style.display = 'block';
+        });
+        // 点击弹窗任意位置关闭
+        note.addEventListener('click', function(e) {
+            e.stopPropagation(); // 阻止点击穿透到背景，同时关闭弹窗
+            this.style.display = 'none';
+        });
 
         // 点击播放音频
         const audio = document.getElementById('birthdayAudio');
         let audioPlayed = false;
 
-        // 点击切换播放/暂停
-        function toggleAudio() {
+        // 页面背景点击切换音乐
+        document.addEventListener('click', function(e) {
+            // 如果点击的是备忘录弹窗，不执行音乐切换
+            if(e.target.closest('#note')) return;
+
             if (!audioPlayed) {
-                // 首次点击：播放音乐
                 audio.play().then(() => {
                     audioPlayed = true;
-                }).catch(err => {
-                    console.log("音频播放失败：", err);
-                });
+                }).catch(err => console.log("音频播放失败：", err));
             } else {
-                // 再次点击：暂停音乐
                 audio.pause();
                 audioPlayed = false;
             }
-        }
-
-        // 绑定点击、触摸事件
-        document.addEventListener('click', toggleAudio);
-        document.addEventListener('touchstart', toggleAudio, { passive: true });
-
+        });
+        document.addEventListener('touchstart', function(e) {
+            if(e.target.closest('#note')) return;
+            if (!audioPlayed) {
+                audio.play().then(() => {
+                    audioPlayed = true;
+                }).catch(err => console.log("音频播放失败：", err));
+            } else {
+                audio.pause();
+                audioPlayed = false;
+            }
+        }, { passive: true });
         console.log('✨ 页面加载完成：所有宇航员永久悬浮显示，16颗行星横向自转');
     </script>
 </body>
