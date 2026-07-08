@@ -68,6 +68,8 @@
             position: absolute;
             opacity: 0.8;
             animation: float 4s ease-in-out infinite;
+            /* 无淡出/消失动画，永久显示 */
+            visibility: visible !important;
         }
         .astro-item img {
             width: 90px;
@@ -206,9 +208,10 @@
 </head>
 <body>
 <audio id="birthdayAudio" loop preload="auto">
-    <source src="./birthday_song.mp3" type="audio/mpeg">
+    <!-- 音频替换为绝对地址 -->
+    <source src="https://epohopes.github.io/birthday_song.mp3" type="audio/mpeg">
     您的浏览器不支持音频播放，请升级浏览器。
-</audio>
+
 
     <canvas id="canvas"></canvas>
     <div id="planetBox"></div>
@@ -233,39 +236,39 @@
     </div>
 
     <script>
-        // ===================== 自定义配置区 =====================
+        // ===================== 自定义配置区（全部图片改为绝对线上地址） =====================
         const birthday = new Date('2006-07-08');
         const starCode = 'Fjong-2006-708';
 
-        // 16颗行星参数
+        // 16颗行星参数 - 完整CDN路径
         const planetConfig = [
-            { img:'planet1.png', xRatio:0.2, yRatio:0.3, speed:0.022, size:42, spinTime:12 },
-            { img:'planet2.png', xRatio:0.8, yRatio:0.6, speed:-0.016, size:56, spinTime:14 },
-            { img:'planet3.png', xRatio:0.3, yRatio:0.75, speed:0.032, size:40, spinTime:10 },
-            { img:'planet4.png', xRatio:0.7, yRatio:0.22, speed:-0.02, size:36, spinTime:16 },
-            { img:'planet5.png', xRatio:0.15, yRatio:0.55, speed:0.018, size:38, spinTime:11 },
-            { img:'planet6.png', xRatio:0.85, yRatio:0.4, speed:-0.025, size:34, spinTime:13 },
-            { img:'planet7.png', xRatio:0.45, yRatio:0.25, speed:0.02, size:48, spinTime:15 },
-            { img:'planet8.png', xRatio:0.05, yRatio:0.15, speed:0.015, size:30, spinTime:9 },
-            { img:'planet9.png', xRatio:0.9, yRatio:0.7, speed:-0.012, size:32, spinTime:12 },
-            { img:'planet10.png',xRatio:0.55, yRatio:0.8, speed:0.028, size:44, spinTime:14 },
-            { img:'planet11.png',xRatio:0.1, yRatio:0.3, speed:-0.019, size:35, spinTime:13 },
-            { img:'planet12.png',xRatio:0.6, yRatio:0.15, speed:0.024, size:41, spinTime:11 },
-            { img:'planet13.png',xRatio:0.92, yRatio:0.32, speed:-0.021, size:33, spinTime:15 },
-            { img:'planet14.png',xRatio:0.4, yRatio:0.62, speed:0.017, size:39, spinTime:10 },
-            { img:'planet15.png',xRatio:0.25, yRatio:0.88, speed:-0.027, size:31, spinTime:14 },
-            { img:'planet16.png',xRatio:0.78, yRatio:0.48, speed:0.02, size:45, spinTime:12 }
+            { img:'https://epohopes.github.io/planet1.png', xRatio:0.2, yRatio:0.3, speed:0.022, size:42, spinTime:12 },
+            { img:'https://epohopes.github.io/planet2.png', xRatio:0.8, yRatio:0.6, speed:-0.016, size:56, spinTime:14 },
+            { img:'https://epohopes.github.io/planet3.png', xRatio:0.3, yRatio:0.75, speed:0.032, size:40, spinTime:10 },
+            { img:'https://epohopes.github.io/planet4.png', xRatio:0.7, yRatio:0.22, speed:-0.02, size:36, spinTime:16 },
+            { img:'https://epohopes.github.io/planet5.png', xRatio:0.15, yRatio:0.55, speed:0.018, size:38, spinTime:11 },
+            { img:'https://epohopes.github.io/planet6.png', xRatio:0.85, yRatio:0.4, speed:-0.025, size:34, spinTime:13 },
+            { img:'https://epohopes.github.io/planet7.png', xRatio:0.45, yRatio:0.25, speed:0.02, size:48, spinTime:15 },
+            { img:'https://epohopes.github.io/planet8.png', xRatio:0.05, yRatio:0.15, speed:0.015, size:30, spinTime:9 },
+            { img:'https://epohopes.github.io/planet9.png', xRatio:0.9, yRatio:0.7, speed:-0.012, size:32, spinTime:12 },
+            { img:'https://epohopes.github.io/planet10.png',xRatio:0.55, yRatio:0.8, speed:0.028, size:44, spinTime:14 },
+            { img:'https://epohopes.github.io/planet11.png',xRatio:0.1, yRatio:0.3, speed:-0.019, size:35, spinTime:13 },
+            { img:'https://epohopes.github.io/planet12.png',xRatio:0.6, yRatio:0.15, speed:0.024, size:41, spinTime:11 },
+            { img:'https://epohopes.github.io/planet13.png',xRatio:0.92, yRatio:0.32, speed:-0.021, size:33, spinTime:15 },
+            { img:'https://epohopes.github.io/planet14.png',xRatio:0.4, yRatio:0.62, speed:0.017, size:39, spinTime:10 },
+            { img:'https://epohopes.github.io/planet15.png',xRatio:0.25, yRatio:0.88, speed:-0.027, size:31, spinTime:14 },
+            { img:'https://epohopes.github.io/planet16.png',xRatio:0.78, yRatio:0.48, speed:0.02, size:45, spinTime:12 }
         ];
 
-        // 7张宇航员参数
+        // 7张宇航员参数 - 完整CDN路径，全部永久悬浮显示
         const astroConfig = [
-            { img:"astronaut1.png", xRatio:0.12, yRatio:0.2, delay:"0s" },
-            { img:"astronaut2.png", xRatio:0.88, yRatio:0.28, delay:"0.6s" },
-            { img:"astronaut3.png", xRatio:0.08, yRatio:0.65, delay:"1.2s" },
-            { img:"astronaut4.png", xRatio:0.91, yRatio:0.72, delay:"1.8s" },
-            { img:"astronaut5.png", xRatio:0.18, yRatio:0.45, delay:"2.4s" },
-            { img:"astronaut6.png", xRatio:0.82, yRatio:0.52, delay:"3s" },
-            { img:"astronaut7.png", xRatio:0.48, yRatio:0.32, delay:"3.6s" }
+            { img:"https://epohopes.github.io/astronaut1.png", xRatio:0.12, yRatio:0.2, delay:"0s" },
+            { img:"https://epohopes.github.io/astronaut2.png", xRatio:0.88, yRatio:0.28, delay:"0.6s" },
+            { img:"https://epohopes.github.io/astronaut3.png", xRatio:0.08, yRatio:0.65, delay:"1.2s" },
+            { img:"https://epohopes.github.io/astronaut4.png", xRatio:0.91, yRatio:0.72, delay:"1.8s" },
+            { img:"https://epohopes.github.io/astronaut5.png", xRatio:0.18, yRatio:0.45, delay:"2.4s" },
+            { img:"https://epohopes.github.io/astronaut6.png", xRatio:0.82, yRatio:0.52, delay:"3s" },
+            { img:"https://epohopes.github.io/astronaut7.png", xRatio:0.48, yRatio:0.32, delay:"3.6s" }
         ];
         // ========================================================
 
@@ -304,7 +307,6 @@
         updateActiveLine();
 
         // ========== 核心修复：严格顺序，彻底消除 planetList 暂时性死区 ==========
-        // 1. 提前声明所有数组变量，规避TDZ
         let planetList = [];
         let astroList = [];
         let stars = [];
@@ -314,7 +316,6 @@
         let W, H;
         let core = { x: 0, y: 0 };
 
-        // 仅定义resize，不执行
         function resize() {
             W = canvas.width = window.innerWidth;
             H = canvas.height = window.innerHeight;
@@ -334,7 +335,7 @@
             })
         }
 
-        // 2. 先创建行星DOM，填充planetList
+        // 生成行星DOM + 加载失败日志
         const planetBox = document.getElementById('planetBox');
         planetConfig.forEach(cfg => {
             const wrap = document.createElement('div');
@@ -342,8 +343,10 @@
             wrap.style.width = cfg.size + 'px';
             wrap.style.animationDuration = cfg.spinTime + 's';
             const img = document.createElement('img');
-            img.src = `./${cfg.img}`;
+            img.src = cfg.img;
             img.alt = '行星';
+            // 图片加载失败捕获
+            img.onerror = () => console.error("行星资源加载失败：", cfg.img);
             wrap.appendChild(img);
             planetBox.appendChild(wrap);
             planetList.push({
@@ -354,15 +357,17 @@
             })
         })
 
-        // 3. 再创建宇航员DOM，填充astroList
+        // 生成宇航员DOM + 加载失败日志，无隐藏逻辑，全部永久渲染
         const astroBox = document.getElementById('astroBox');
         astroConfig.forEach(cfg => {
             const wrap = document.createElement('div');
             wrap.className = 'astro-item';
             wrap.style.animationDelay = cfg.delay;
             const img = document.createElement('img');
-            img.src = `./${cfg.img}`;
+            img.src = cfg.img;
             img.alt = "宇航员";
+            // 图片加载失败捕获
+            img.onerror = () => console.error("宇航员资源加载失败：", cfg.img);
             wrap.appendChild(img);
             astroBox.appendChild(wrap);
             astroList.push({
@@ -373,11 +378,10 @@
             })
         })
 
-        // 4. 行星、宇航员全部初始化完毕，再执行resize
         window.addEventListener('resize', resize);
         resize();
 
-        // 5. resize拿到宽高后生成星星
+        // 生成星空点位
         for (let i = 0; i < 1500; i++) {
             stars.push({
                 x: Math.random() * W,
@@ -387,7 +391,7 @@
             });
         }
 
-        // 6. 渲染循环
+        // 星空渲染循环
         function draw() {
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, W, H);
@@ -410,7 +414,7 @@
         }
         draw();
 
-        // 双击备忘录
+        // 双击备忘录弹窗
         const note = document.getElementById('note');
         document.body.addEventListener('dblclick', () => note.style.display = 'block');
         note.addEventListener('click', () => note.style.display = 'none');
@@ -432,11 +436,8 @@
         };
         document.addEventListener('click', clickHandler);
         document.addEventListener('touchstart', clickHandler, { passive: true });
-        document.addEventListener('click', () => {
-            if (!audioPlayed) audio.play().catch(()=>{});
-        });
 
-        console.log('✨ 页面加载完成：16颗行星横向自转，7张宇航员同时悬浮显示');
+        console.log('✨ 页面加载完成：所有宇航员永久悬浮显示，16颗行星横向自转');
     </script>
 </body>
 </html>
